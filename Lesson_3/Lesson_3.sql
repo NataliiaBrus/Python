@@ -39,10 +39,14 @@ limit 10
 в прокаті
 */
 
-REFRESH MATERIALIZED view public.rental_by_category
-select *
-from public.rental_by_category
-order by 1 desc
+select c.name as category_name, sum(p.amount) payment_amount
+from public.payment p
+join public.rental r on r.rental_id=p.rental_id
+join public.inventory i on i.inventory_id=r.inventory_id
+join public.film_category fc on fc.film_id=i.film_id
+join public.category c on c.category_id=fc.category_id
+group by c.name
+order by 2 desc
 limit 1
 
 
